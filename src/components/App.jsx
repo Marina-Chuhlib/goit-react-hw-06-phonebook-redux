@@ -1,24 +1,30 @@
+import { Provider } from 'react-redux';
 import React, { useState, useEffect } from 'react';
-import { nanoid } from 'nanoid'
+
+import { nanoid } from 'nanoid';
+import { useSelector, useDispatch } from 'react-redux';
+
+import { store } from './redux/store';
 
 import ContactForm from './ContactForm/ContactForm';
 import ContactsList from './ContactsList/ContactsList';
 import Filter from './Filter/Filter';
 
-import contactsList from './contacts';
+// import contactsList from './contacts';
+import { addContact } from './redux/actions';
 
 import css from './App.module.css';
 
 const App = () => {
-  const [contacts, setContacts] = useState(() => {
-    const contacts = JSON.parse(localStorage.getItem('my-contacts'));
-    return contacts ? contacts : [...contactsList];
-  });
+  const contacts = useSelector(store => store.contacts);
   const [filter, setFilter] = useState('');
+  console.log(contacts);
 
-  useEffect(() => {
-    localStorage.setItem('my-contacts', JSON.stringify(contacts));
-  }, [contacts]);
+  const dispatch = useDispatch();
+
+  // useEffect(() => {
+  //   localStorage.setItem('my-contacts', JSON.stringify(contacts));
+  // }, [contacts]);
 
   const isDuplicate = name => {
     const normalized = name.toLowerCase();
@@ -29,62 +35,74 @@ const App = () => {
     return Boolean(result);
   };
 
-  const addContact = ({ name, number }) => {
+  const handleAddContact = ({ name, number }) => {
     if (isDuplicate(name)) {
       alert(`${name} is already in contacts`);
       return false;
     }
 
-    setContacts(prevContacts => {
-      const newContact = {
-        id: nanoid(),
-        name,
-        number,
-      };
-
-      return [newContact, ...prevContacts];
-    });
-
-    return true;
+    const action = addContact({ name, number });
+    dispatch(action);
   };
 
-  const deleteContact = id => {
-    setContacts(prevContacts =>
-      prevContacts.filter(contact => contact.id !== id)
-    );
-  };
+  // const addContact = ({ name, number }) => {
+  //   if (isDuplicate(name)) {
+  //     alert(`${name} is already in contacts`);
+  //     return false;
+  //   }
 
-  const getVisibleContacts = () => {
-    const normalizedFilter = filter.toLowerCase();
+  //   setContacts(prevContacts => {
+  //     const newContact = {
+  //       id: nanoid(),
+  //       name,
+  //       number,
+  //     };
 
-    return contacts.filter(contact =>
-      contact.name.toLowerCase().includes(normalizedFilter)
-    );
-  };
+  //     return [newContact, ...prevContacts];
+  //   });
+
+  //   return true;
+  // };
+
+  // const deleteContact = id => {
+  //   setContacts(prevContacts =>
+  //     prevContacts.filter(contact => contact.id !== id)
+  //   );
+  // };
+
+  // const getVisibleContacts = () => {
+  //   const normalizedFilter = filter.toLowerCase();
+
+  //   return contacts.filter(contact =>
+  //     contact.name.toLowerCase().includes(normalizedFilter)
+  //   );
+  // };
 
   const handleFilter = e => {
     setFilter(e.currentTarget.value);
   };
 
-  const visibleContacts = getVisibleContacts();
-  const isContacts = Boolean(visibleContacts.length);
+  // const visibleContacts = getVisibleContacts();
+  // const isContacts = Boolean(visibleContacts.length);
 
   return (
-    <div className={css.wrapper}>
-      <h2>Phonebook</h2>
-      <ContactForm onSubmit={addContact} />
+    <Provider store={store}>
+      <div className={css.wrapper}>
+        <h2>Phonebook</h2>
+        <ContactForm onSubmit={handleAddContact} />
 
-      <h2>Contacts</h2>
-      <Filter value={filter} onChange={handleFilter} />
+        <h2>Contacts</h2>
+        {/* <Filter value={filter} onChange={handleFilter} /> */}
 
-      {isContacts && (
+        {/* {isContacts && ( */}
         <ContactsList
-          contacts={visibleContacts}
-          deleteContact={deleteContact}
+        // contacts={visibleContacts}
+        // deleteContact={deleteContact}
         />
-      )}
-      {!isContacts && <p className={css.text}>No contacts in list</p>}
-    </div>
+        {/* )} */}
+        {/* {!isContacts && <p className={css.text}>No contacts in list</p>} */}
+      </div>
+    </Provider>
   );
 };
 
