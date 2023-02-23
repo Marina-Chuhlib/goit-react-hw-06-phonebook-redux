@@ -1,10 +1,7 @@
-
 import React, { useState } from 'react';
 
 // import { nanoid } from 'nanoid';
 import { useSelector, useDispatch } from 'react-redux';
-
-
 
 import ContactForm from './ContactForm/ContactForm';
 import ContactsList from './ContactsList/ContactsList';
@@ -17,9 +14,8 @@ import css from './App.module.css';
 
 const App = () => {
   const contacts = useSelector(store => store.contacts);
-  console.log(contacts)
+  console.log(contacts);
   const [filter, setFilter] = useState('');
-  // console.log(contacts);
 
   const dispatch = useDispatch();
 
@@ -32,7 +28,7 @@ const App = () => {
     const result = contacts.find(({ name }) => {
       return normalized === name.toLowerCase();
     });
-
+    console.log(Boolean(result));
     return Boolean(result);
   };
 
@@ -46,42 +42,38 @@ const App = () => {
     dispatch(action);
   };
 
-    const handleDeleteContact = (id) => {
-        dispatch(deleteContact(id));
-    }
+  const handleDeleteContact = id => {
+    dispatch(deleteContact(id));
+  };
 
   const handleFilter = e => {
     setFilter(e.currentTarget.value);
   };
 
-  // const getVisibleContacts = () => {
-  //   const normalizedFilter = filter.toLowerCase();
-  //   return contacts.filter(contact =>
-  //     contact.name.toLowerCase().includes(normalizedFilter)
-  //   );
-  // };
+  const getVisibleContacts = () => {
+    const normalizedFilter = filter.toLowerCase();
+    return contacts.filter(contact =>
+      contact.name.toLowerCase().includes(normalizedFilter)
+    );
+  };
 
-  // const visibleContacts = getVisibleContacts();
-  // const isContacts = Boolean(visibleContacts.length);
+  const visibleContacts = getVisibleContacts();
+  const isContacts = Boolean(contacts.length);
 
+  console.log(contacts.length);
   return (
+    <div className={css.wrapper}>
+      <h2>Phonebook</h2>
+      <ContactForm onSubmit={handleAddContact} />
 
-      <div className={css.wrapper}>
-        <h2>Phonebook</h2>
-        <ContactForm onSubmit={handleAddContact} />
+      <h2>Contacts</h2>
+      <Filter value={filter} onChange={handleFilter} />
 
-        <h2>Contacts</h2>
-        <Filter value={filter} onChange={handleFilter} />
-
-        {contacts && (
-        <ContactsList
-        // contacts={visibleContacts}
-        deleteContact={handleDeleteContact}
-        />
-        )} 
-        {/* {!isContacts && <p className={css.text}>No contacts in list</p>} */}
-      </div>
-
+      {isContacts && (
+        <ContactsList contacts={contacts} deleteContact={handleDeleteContact} />
+      )}
+      {!isContacts && <p className={css.text}>No contacts in list</p>}
+    </div>
   );
 };
 
