@@ -11,14 +11,14 @@ import ContactsList from './ContactsList/ContactsList';
 import Filter from './Filter/Filter';
 
 // import contactsList from './contacts';
-import { addContact } from './redux/actions';
+import { addContact, deleteContact } from './redux/actions';
 
 import css from './App.module.css';
 
 const App = () => {
   const contacts = useSelector(store => store.contacts);
   const [filter, setFilter] = useState('');
-  console.log(contacts);
+  // console.log(contacts);
 
   const dispatch = useDispatch();
 
@@ -45,24 +45,6 @@ const App = () => {
     dispatch(action);
   };
 
-  // const addContact = ({ name, number }) => {
-  //   if (isDuplicate(name)) {
-  //     alert(`${name} is already in contacts`);
-  //     return false;
-  //   }
-
-  //   setContacts(prevContacts => {
-  //     const newContact = {
-  //       id: nanoid(),
-  //       name,
-  //       number,
-  //     };
-
-  //     return [newContact, ...prevContacts];
-  //   });
-
-  //   return true;
-  // };
 
   // const deleteContact = id => {
   //   setContacts(prevContacts =>

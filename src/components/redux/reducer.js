@@ -1,4 +1,4 @@
-import { ADD_CONTACT } from './types';
+import { ADD_CONTACT, DELETE_CONTACT } from './types';
 import contacts from 'components/contacts';
 
 const initialState = {
@@ -11,9 +11,9 @@ export const reducer = (state = initialState, action) => {
     case ADD_CONTACT:
       const newContacts = [...state.contacts, action.payload];
       return { ...state, contacts: newContacts };
-    // case DELETE_BOOK:
-    //   const result = state.books.filter(item => item.id !== action.payload);
-    //   return { ...state, books: result };
+    case DELETE_CONTACT:
+      const result = state.contacts.filter(item => item.id !== action.payload);
+      return { ...state, contacts: result };
     default:
       return state;
   }
