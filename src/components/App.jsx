@@ -1,21 +1,20 @@
-import React, { useState } from 'react';
-
-// import { nanoid } from 'nanoid';
 import { useSelector, useDispatch } from 'react-redux';
+
+import {getAllContacts,getFilteredContacts, getFilter} from "./redux/selectors"
+import { addContact, deleteContact, setFilter } from './redux/actions';
 
 import ContactForm from './ContactForm/ContactForm';
 import ContactsList from './ContactsList/ContactsList';
 import Filter from './Filter/Filter';
 
-// import contactsList from './contacts';
-import { addContact, deleteContact } from './redux/actions';
 
 import css from './App.module.css';
 
 const App = () => {
-  const contacts = useSelector(store => store.contacts);
+  const contacts = useSelector(getAllContacts);
   console.log(contacts);
-  const [filter, setFilter] = useState('');
+ const filter = useSelector(getFilter);
+const filteredContacts = useSelector(getFilteredContacts);
 
   const dispatch = useDispatch();
 
@@ -28,7 +27,6 @@ const App = () => {
     const result = contacts.find(({ name }) => {
       return normalized === name.toLowerCase();
     });
-    console.log(Boolean(result));
     return Boolean(result);
   };
 
@@ -46,21 +44,14 @@ const App = () => {
     dispatch(deleteContact(id));
   };
 
-  const handleFilter = e => {
-    setFilter(e.currentTarget.value);
-  };
+    const handleFilter = ({ target }) => {
+        dispatch(setFilter(target.value))
+    };
 
-  const getVisibleContacts = () => {
-    const normalizedFilter = filter.toLowerCase();
-    return contacts.filter(contact =>
-      contact.name.toLowerCase().includes(normalizedFilter)
-    );
-  };
-
-  const visibleContacts = getVisibleContacts();
   const isContacts = Boolean(contacts.length);
 
-  console.log(contacts.length);
+  console.log(filteredContacts);
+  
   return (
     <div className={css.wrapper}>
       <h2>Phonebook</h2>

@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import css from '../ContactsList/ContactsList.module.css';
 
 const ContactsList = ({ contacts, deleteContact }) => {
-  console.log(contacts)
   const elements = contacts.map(({ id, name, number }) => (
     <li key={id} className={css.item}>
       <p className={css.contact}>
