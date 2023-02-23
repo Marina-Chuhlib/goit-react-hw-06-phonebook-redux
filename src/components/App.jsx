@@ -50,7 +50,6 @@ const filteredContacts = useSelector(getFilteredContacts);
 
   const isContacts = Boolean(contacts.length);
 
-  console.log(filteredContacts);
   
   return (
     <div className={css.wrapper}>
