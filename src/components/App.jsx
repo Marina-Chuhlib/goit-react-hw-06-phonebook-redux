@@ -1,10 +1,10 @@
-import { Provider } from 'react-redux';
+
 import React, { useState, useEffect } from 'react';
 
 import { nanoid } from 'nanoid';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { store } from './redux/store';
+
 
 import ContactForm from './ContactForm/ContactForm';
 import ContactsList from './ContactsList/ContactsList';
@@ -17,6 +17,7 @@ import css from './App.module.css';
 
 const App = () => {
   const contacts = useSelector(store => store.contacts);
+  console.log(contacts)
   const [filter, setFilter] = useState('');
   // console.log(contacts);
 
@@ -45,46 +46,42 @@ const App = () => {
     dispatch(action);
   };
 
-
-  // const deleteContact = id => {
-  //   setContacts(prevContacts =>
-  //     prevContacts.filter(contact => contact.id !== id)
-  //   );
-  // };
-
-  // const getVisibleContacts = () => {
-  //   const normalizedFilter = filter.toLowerCase();
-
-  //   return contacts.filter(contact =>
-  //     contact.name.toLowerCase().includes(normalizedFilter)
-  //   );
-  // };
+    const handleDeleteContact = (id) => {
+        dispatch(deleteContact(id));
+    }
 
   const handleFilter = e => {
     setFilter(e.currentTarget.value);
   };
 
+  // const getVisibleContacts = () => {
+  //   const normalizedFilter = filter.toLowerCase();
+  //   return contacts.filter(contact =>
+  //     contact.name.toLowerCase().includes(normalizedFilter)
+  //   );
+  // };
+
   // const visibleContacts = getVisibleContacts();
   // const isContacts = Boolean(visibleContacts.length);
 
   return (
-    <Provider store={store}>
+
       <div className={css.wrapper}>
         <h2>Phonebook</h2>
         <ContactForm onSubmit={handleAddContact} />
 
         <h2>Contacts</h2>
-        {/* <Filter value={filter} onChange={handleFilter} /> */}
+        <Filter value={filter} onChange={handleFilter} />
 
-        {/* {isContacts && ( */}
+        {contacts && (
         <ContactsList
         // contacts={visibleContacts}
-        // deleteContact={deleteContact}
+        deleteContact={handleDeleteContact}
         />
-        {/* )} */}
+        )} 
         {/* {!isContacts && <p className={css.text}>No contacts in list</p>} */}
       </div>
-    </Provider>
+
   );
 };
 
