@@ -20,7 +20,6 @@ const App = () => {
   const filter = useSelector(getFilter);
 
   const filteredContacts = useSelector(getFilteredContacts);
-  console.log(filteredContacts);
 
   const dispatch = useDispatch();
 
@@ -55,6 +54,7 @@ const App = () => {
   };
 
   const isContacts = Boolean(contacts.length > 0);
+
 
   return (
     <div className={css.wrapper}>

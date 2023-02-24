@@ -1,8 +1,8 @@
 import { ADD_CONTACT, DELETE_CONTACT, SET_FILTER } from './types';
-import contacts from 'components/contacts';
+// import contacts from 'components/contacts';
 
 const initialState = {
-  contacts: [...contacts],
+  contacts: [],
   filter: '',
 };
 
