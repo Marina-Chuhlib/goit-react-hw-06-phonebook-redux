@@ -1,20 +1,26 @@
 import { useSelector, useDispatch } from 'react-redux';
 
-import {getAllContacts,getFilteredContacts, getFilter} from "./redux/selectors"
+import {
+  getAllContacts,
+  getFilteredContacts,
+  getFilter,
+} from './redux/selectors';
 import { addContact, deleteContact, setFilter } from './redux/actions';
 
 import ContactForm from './ContactForm/ContactForm';
 import ContactsList from './ContactsList/ContactsList';
 import Filter from './Filter/Filter';
 
-
 import css from './App.module.css';
 
 const App = () => {
   const contacts = useSelector(getAllContacts);
   console.log(contacts);
- const filter = useSelector(getFilter);
-const filteredContacts = useSelector(getFilteredContacts);
+
+  const filter = useSelector(getFilter);
+
+  const filteredContacts = useSelector(getFilteredContacts);
+  console.log(filteredContacts);
 
   const dispatch = useDispatch();
 
@@ -44,13 +50,12 @@ const filteredContacts = useSelector(getFilteredContacts);
     dispatch(deleteContact(id));
   };
 
-    const handleFilter = ({ target }) => {
-        dispatch(setFilter(target.value))
-    };
+  const handleFilter = ({ target }) => {
+    dispatch(setFilter(target.value));
+  };
 
-  const isContacts = Boolean(contacts.length);
+  const isContacts = Boolean(contacts.length > 0);
 
-  
   return (
     <div className={css.wrapper}>
       <h2>Phonebook</h2>
@@ -60,7 +65,7 @@ const filteredContacts = useSelector(getFilteredContacts);
       <Filter value={filter} onChange={handleFilter} />
 
       {isContacts && (
-        <ContactsList contacts={contacts} deleteContact={handleDeleteContact} />
+        <ContactsList contacts={filteredContacts} deleteContact={handleDeleteContact} />
       )}
       {!isContacts && <p className={css.text}>No contacts in list</p>}
     </div>
